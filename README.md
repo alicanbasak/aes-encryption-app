@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AES Encryption Tool
 
-## Getting Started
+A modern, secure AES encryption and decryption tool built with Next.js and TypeScript. Features an Apple-inspired design and C# compatibility.
 
-First, run the development server:
+## 🔒 Features
 
+- **AES-256-CBC Encryption**: Industry-standard encryption algorithm
+- **PBKDF2 Key Derivation**: Secure key generation with 1000 iterations
+- **C# Compatibility**: Compatible with C# AES implementations
+- **Apple-Style Design**: Clean, minimal, and elegant user interface
+- **Real-time Processing**: Instant encryption and decryption
+- **Copy to Clipboard**: Easy copying of encrypted/decrypted text
+- **Toast Notifications**: User-friendly feedback system
+- **Progressive Web App**: Installable as a mobile app
+- **SEO Optimized**: Complete meta tags and structured data
+
+## 🛡️ Security Features
+
+- Environment variable key management
+- Client-side processing (no data sent to servers)
+- UTF-16LE encoding for C# compatibility
+- PBKDF2 key derivation with salt
+- Secure cryptographic operations using Web Crypto API
+
+## 🚀 Tech Stack
+
+- **Next.js 15** - React framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **Web Crypto API** - Cryptographic operations
+
+## 📱 Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/alicanbasak/aes-encryption-app.git
+cd aes-encryption-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Create environment file:
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run development server:
+```bash
+npm run dev
+```
 
-## Learn More
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-To learn more about Next.js, take a look at the following resources:
+## 🔧 Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a `.env.local` file with your encryption settings:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+NEXT_PUBLIC_ENCRYPTION_KEY=your-encryption-key-here
+NEXT_PUBLIC_SALT=Ivan Medvedev
+```
 
-## Deploy on Vercel
+## 🏗️ Build & Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Build for production
+npm run build
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Start production server
+npm run start
+
+# Lint code
+npm run lint
+```
+
+## 🌐 Deployment
+
+This project is optimized for deployment on:
+
+- **Vercel** (recommended)
+- **Netlify**
+- **AWS Amplify**
+- **Any Node.js hosting**
+
+## 🔐 C# Compatibility
+
+This tool is designed to be compatible with C# AES implementations using:
+
+- `Encoding.Unicode` (UTF-16LE)
+- `Rfc2898DeriveBytes` with 1000 iterations
+- `AesCryptoServiceProvider` with CBC mode
+- Same salt and key values
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 🔍 SEO & Performance
+
+- Complete meta tags and Open Graph data
+- Structured data (JSON-LD)
+- Progressive Web App manifest
+- Optimized images and icons
+- Fast loading with Next.js optimization
+
+## 📞 Support
+
+If you encounter any issues or have questions, please [open an issue](https://github.com/alicanbasak/aes-encryption-app/issues).
+
+---
+
+Made with ❤️ for secure communication

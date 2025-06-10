@@ -7,9 +7,7 @@ const AESEncryption = () => {
   const [encryptedText, setEncryptedText] = useState('');
   const [decryptedText, setDecryptedText] = useState('');
   const [mode, setMode] = useState('encrypt');
-  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
@@ -87,8 +85,8 @@ const AESEncryption = () => {
       const iv = derivedBytes.slice(keyLength, keyLength + ivLength);
       
       return { key, iv };
-    } catch (error: any) {
-      showToastMessage("Key derivation error: " + error.message, 'error');
+    } catch (error: unknown) {
+      showToastMessage("Key derivation error: " + (error as Error).message, 'error');
       throw error;
     }
   };
@@ -96,8 +94,6 @@ const AESEncryption = () => {
   // AES şifreleme fonksiyonu (C# Encrypt metoduyla uyumlu)
   const encryptText = async () => {
     try {
-      setError('');
-      setStatus('');
       setIsLoading(true);
       
       if (!inputText) {
@@ -131,10 +127,11 @@ const AESEncryption = () => {
       // Base64 kodlama
       const encryptedBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedBuffer)));
       setEncryptedText(encryptedBase64);
+      setInputText(''); // Clear input after successful encryption
       showToastMessage('Text encrypted successfully', 'success');
       setIsLoading(false);
-    } catch (err: any) {
-      showToastMessage('Encryption failed: ' + err.message, 'error');
+    } catch (err: unknown) {
+      showToastMessage('Encryption failed: ' + (err as Error).message, 'error');
       setIsLoading(false);
     }
   };
@@ -142,8 +139,6 @@ const AESEncryption = () => {
   // AES şifre çözme fonksiyonu (C# Decrypt metoduyla uyumlu)
   const decryptText = async () => {
     try {
-      setError('');
-      setStatus('');
       setIsLoading(true);
       
       if (!inputText) {
@@ -182,10 +177,11 @@ const AESEncryption = () => {
       const result = decodeUtf16LE(decryptedBytes);
       
       setDecryptedText(result);
+      setInputText(''); // Clear input after successful decryption
       showToastMessage('Text decrypted successfully', 'success');
       setIsLoading(false);
-    } catch (err: any) {
-      showToastMessage('Decryption failed: ' + err.message, 'error');
+    } catch (err: unknown) {
+      showToastMessage('Decryption failed: ' + (err as Error).message, 'error');
       setIsLoading(false);
     }
   };
@@ -214,7 +210,7 @@ const AESEncryption = () => {
           <div className="flex bg-gray-100 rounded-lg p-1 w-full">
             <button 
               onClick={() => setMode('encrypt')} 
-              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-150 ${
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-150 cursor-pointer ${
                 mode === 'encrypt' 
                   ? 'bg-white text-black shadow-sm' 
                   : 'text-gray-600'
@@ -225,7 +221,7 @@ const AESEncryption = () => {
             </button>
             <button 
               onClick={() => setMode('decrypt')} 
-              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-150 ${
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-150 cursor-pointer ${
                 mode === 'decrypt' 
                   ? 'bg-white text-black shadow-sm' 
                   : 'text-gray-600'
@@ -237,7 +233,7 @@ const AESEncryption = () => {
           </div>
 
           <div className="space-y-3">
-            <label className="block text-sm text-gray-900">
+            <label className="block text-sm text-gray-900 h-5">
               {mode === 'encrypt' ? 'Text to encrypt' : 'Encrypted text'}
             </label>
             <textarea 
@@ -252,7 +248,7 @@ const AESEncryption = () => {
 
           <button 
             onClick={handleProcess}
-            className="w-full py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors duration-150"
+            className="w-full py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed cursor-pointer transition-colors duration-150"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -265,39 +261,41 @@ const AESEncryption = () => {
             )}
           </button>
 
-          {encryptedText && mode === 'encrypt' && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-900">Encrypted Text</span>
-                <button
-                  onClick={() => navigator.clipboard.writeText(encryptedText)}
-                  className="text-sm text-blue-500 hover:text-blue-600"
-                >
-                  Copy
-                </button>
+          <div className="min-h-[140px]">
+            {encryptedText && mode === 'encrypt' && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-900">Encrypted Text</span>
+                  <button
+                    onClick={() => navigator.clipboard.writeText(encryptedText)}
+                    className="text-sm text-blue-500 hover:text-blue-600 cursor-pointer"
+                  >
+                    Copy
+                  </button>
+                </div>
+                <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 break-all font-mono text-xs text-gray-600 max-h-32 overflow-y-auto">
+                  {encryptedText}
+                </div>
               </div>
-              <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 break-all font-mono text-xs text-gray-600 max-h-32 overflow-y-auto">
-                {encryptedText}
-              </div>
-            </div>
-          )}
+            )}
 
-          {decryptedText && mode === 'decrypt' && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-900">Decrypted Text</span>
-                <button
-                  onClick={() => navigator.clipboard.writeText(decryptedText)}
-                  className="text-sm text-blue-500 hover:text-blue-600"
-                >
-                  Copy
-                </button>
+            {decryptedText && mode === 'decrypt' && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-900">Decrypted Text</span>
+                  <button
+                    onClick={() => navigator.clipboard.writeText(decryptedText)}
+                    className="text-sm text-blue-500 hover:text-blue-600 cursor-pointer"
+                  >
+                    Copy
+                  </button>
+                </div>
+                <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 break-all font-mono text-xs text-gray-600 max-h-32 overflow-y-auto">
+                  {decryptedText}
+                </div>
               </div>
-              <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 break-all font-mono text-xs text-gray-600 max-h-32 overflow-y-auto">
-                {decryptedText}
-              </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 
